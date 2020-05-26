@@ -36,10 +36,10 @@ public class Center extends BorderPane {
 
 	private Button testMousePosition;
 	private int x1, x2, y1, y2;
-
-	private TextField tx1 = new TextField("1920");
-	private TextField tx2 = new TextField("100");
-	private TextField ty1 = new TextField("1080");
+//	e(1818, 1011, 35, 35);
+	private TextField tx1 = new TextField("1818");
+	private TextField tx2 = new TextField("35");
+	private TextField ty1 = new TextField("1011");
 	private TextField ty2 = new TextField("10");
 
 	private ImageView imageView = new ImageView();
@@ -60,8 +60,8 @@ public class Center extends BorderPane {
 
 		VBox v = new VBox();
 		v.getChildren().add(mousePosi);
-		v.getChildren().add(new HBox(tx1, ty1));
-		v.getChildren().add(new HBox(tx2, ty2));
+		v.getChildren().add(new HBox(new Label("X"),tx1,new Label("Y"), ty1));
+		v.getChildren().add(new HBox(new Label("Posi"),tx2,new Label("Start Delay"), ty2));
 		this.setTop(v);
 
 		HBox images1 = new HBox(new Label("R :"), imageViewReference);
@@ -78,28 +78,6 @@ public class Center extends BorderPane {
 		mousePosi.setText("Mi az anyádat nyomkodol");
 		testMousePosition.setDisable(true);
 
-		// new Thread(new Runnable() {
-		// @Override
-		// public void run() {
-		// for (int i = 0; i < 100 * 100; i++) {
-		// try {
-		// PointerInfo a = MouseInfo.getPointerInfo();
-		// Point b = a.getLocation();
-		// int x = (int) b.getX();
-		// int y = (int) b.getY();
-		// Platform.runLater(new Runnable() {
-		// @Override
-		// public void run() {
-		// mousePosi.setText(x + " " + y);
-		// }
-		// });
-		// Thread.sleep(10);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// }
-		// }
-		// }).start();
 
 		return null;
 	}
@@ -144,15 +122,22 @@ public class Center extends BorderPane {
 
 	private void takePrintSCreen() throws IOException, HeadlessException, AWTException {
 
-		try {
-			Thread.sleep(3500);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+
+				x1 = Integer.parseInt(tx1.getText());
+				x2 = Integer.parseInt(tx2.getText());
+				y1 = Integer.parseInt(ty1.getText());
+				y2 = Integer.parseInt(ty2.getText());
+
+				try {
+					Thread.sleep(y2*1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				boolean defaultDone = false;
 				while (true) {
@@ -167,7 +152,7 @@ public class Center extends BorderPane {
 
 					BufferedImage image;
 					try {
-						image = new Robot().createScreenCapture(new Rectangle(x1, y1));
+						image = new Robot().createScreenCapture(new Rectangle(1920, 1080));
 
 						// boolean write = ImageIO.write(image, "png", new
 						// File("screenshot.png"));
@@ -175,7 +160,7 @@ public class Center extends BorderPane {
 
 //						image = image.getSubimage(x1 - x2, y1 - x2, x2, x2);
 //						image = image.getSubimage(0, (int) x2 / 2, (int) x2 / 2, (int) x2 / 2);
-						image = image.getSubimage(1818, 1011, 35, 35);
+						image = image.getSubimage(x1, y1, x2, x2);
 						System.out.println(x1 + " " + y1 + ":" + x2);
 
 						boolean write = ImageIO.write(image, "png", new File("screenshot.png"));
